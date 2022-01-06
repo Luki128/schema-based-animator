@@ -6,7 +6,7 @@ namespace schema_based_animator
 {
     public class Scale : ITransform
     {
-        public float scale;
+        public float scale = 1.0f;
         public ITransform interpolate(float stage, ITransform target)
         {
             Scale t = target as Scale;

@@ -6,8 +6,8 @@ namespace schema_based_animator
 {
    public class Position : ITransform
     {
-        public float x;
-        public float y;
+        public float x = 0.0f;
+        public float y = 0.0f;
         public ITransform interpolate(float stage, ITransform target)
         {
             Position t = target as Position;
