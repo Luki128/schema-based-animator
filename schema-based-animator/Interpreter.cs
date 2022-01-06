@@ -95,7 +95,7 @@ namespace schema_based_animator
                 }
                 line++;
             }
-            dbg.Raport();
+            dbg.ClassicRaport();
         }
         void InitStage2()
         {

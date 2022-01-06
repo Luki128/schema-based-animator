@@ -35,7 +35,7 @@ namespace schema_based_animator
         {
             if (!Directory.Exists(ProcessingTempFolder))
             {
-                dbg.Wraning($"Foder {ProcessingTempFolder} not exisitng, so is auto created");
+                dbg.Wraning($"Folder {ProcessingTempFolder} not exisitng, so is auto created");
                 Directory.CreateDirectory(ProcessingTempFolder);
             }
             ImageInfo[] imageInfos = new ImageInfo[frames];

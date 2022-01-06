@@ -16,12 +16,14 @@ namespace LewyDiagnostic
 
         public static int succesCounter = 0;
         public static int failCounter = 0;
+        public static int warningCounter = 0;
 
 
         public static void ResetTestInf()
         {
             succesCounter = 0;
             failCounter = 0;
+            warningCounter = 0;
         }
         public static void NewLine()
         {
@@ -102,7 +104,7 @@ namespace LewyDiagnostic
         public static void Wraning(string message)
         {
             if (!waringsEnabled) return;
-
+            warningCounter++;
             WriteLine(message, ConsoleColor.Yellow);
         }
         public static void Succes(string message)
@@ -142,6 +144,32 @@ namespace LewyDiagnostic
                 Centred("System failed, not all test passed", 50, ConsoleColor.Red);
             else
                 Centred("System pass tests successfully ", 50, ConsoleColor.Green);
+            Title("", 50, '-', ConsoleColor.Cyan);
+
+            bool failed = (failCounter == 0);
+
+            if (rstCounters)
+            {
+                failCounter = 0;
+                succesCounter = 0;
+            }
+            return failed;
+        }
+        public static bool ClassicRaport(bool rstCounters = true)
+        {
+            //WriteLine("---------------Tests for system report---------------\n", ConsoleColor.Yellow);
+            Title("Work Done", 50, '-', ConsoleColor.Yellow, ConsoleColor.Cyan);
+
+            WriteProperty("\nErrors", ConsoleColor.Red, $"{failCounter}", ConsoleColor.DarkRed);
+            WriteProperty("\nWarnings", ConsoleColor.Red, $"{warningCounter}", ConsoleColor.DarkRed);
+           
+
+            Title("Conclusion", 50, '-', ConsoleColor.Yellow, ConsoleColor.Cyan);
+
+            if (failCounter > 0)
+                Centred("System failed", 50, ConsoleColor.Red);
+            else
+                Centred("System pass successfully ", 50, ConsoleColor.Green);
             Title("", 50, '-', ConsoleColor.Cyan);
 
             bool failed = (failCounter == 0);
