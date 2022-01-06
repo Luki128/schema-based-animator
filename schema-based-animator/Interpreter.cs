@@ -209,7 +209,7 @@ namespace schema_based_animator
             currentClip.position.addCommand(com);
         }
 
-        public void rotation(int frame, int angle)
+        public void rotation(int frame, float angle)
         {
             Rotation rot = new Rotation()
             {

@@ -160,8 +160,8 @@ namespace LewyDiagnostic
             //WriteLine("---------------Tests for system report---------------\n", ConsoleColor.Yellow);
             Title("Work Done", 50, '-', ConsoleColor.Yellow, ConsoleColor.Cyan);
 
-            WriteProperty("\nErrors", ConsoleColor.Red, $"{failCounter}", ConsoleColor.DarkRed);
-            WriteProperty("\nWarnings", ConsoleColor.Red, $"{warningCounter}", ConsoleColor.DarkRed);
+            WriteProperty("\nErrors    ", ConsoleColor.Red, $"{failCounter}", ConsoleColor.DarkRed);
+            WriteProperty("\nWarnings   ", ConsoleColor.Red, $"{warningCounter}", ConsoleColor.DarkYellow);
            
 
             Title("Conclusion", 50, '-', ConsoleColor.Yellow, ConsoleColor.Cyan);
