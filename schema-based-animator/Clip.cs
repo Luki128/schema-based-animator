@@ -21,9 +21,9 @@ namespace schema_based_animator
 
         public Clip()
         {
-            position.addCommand(new Command<Position> { frame = 0, value = new Position() });
-            rotation.addCommand(new Command<Rotation> { frame = 0, value = new Rotation() });
-            scale.addCommand(new Command<Scale> { frame = 0, value = new Scale() });
+            position.addCommand(new Command<Position> { frame = -1, value = new Position() });
+            rotation.addCommand(new Command<Rotation> { frame = -1, value = new Rotation() });
+            scale.addCommand(new Command<Scale> { frame = -1, value = new Scale() });
         }
 
         public Bitmap getClipAtFrame(int frame, int width, int height)

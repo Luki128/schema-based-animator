@@ -12,6 +12,7 @@ namespace schema_based_animator
         {
             Interpereter interpereter = new Interpereter();
             interpereter.RunScript("test.txt");
+            interpereter.video("test.mp4");
         }
 
     }
