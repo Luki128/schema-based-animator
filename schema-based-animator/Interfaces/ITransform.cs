@@ -4,7 +4,7 @@ using System.Text;
 
 namespace schema_based_animator
 {
-    interface ITransform
+    public interface ITransform
     {
         ITransform interpolate(float stage, ITransform target);
     }

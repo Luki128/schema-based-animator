@@ -4,7 +4,7 @@ using System.Text;
 
 namespace schema_based_animator
 {
-    class Rotation : ITransform
+   public class Rotation : ITransform
     {
         public float angle;
         public ITransform interpolate(float stage, ITransform target)

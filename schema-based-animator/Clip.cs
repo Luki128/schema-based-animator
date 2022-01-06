@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace schema_based_animator
 {
-    class Clip
+    public class Clip
     {
         public CommandSequence<Position> position = new CommandSequence<Position>();
         public CommandSequence<Rotation> rotation = new CommandSequence<Rotation>();
@@ -13,6 +13,11 @@ namespace schema_based_animator
         public float origin_x = 0.0f;
         public float origin_y = 0.0f;
         public Bitmap source;
+
+        public void LoadImage(string str)
+        {
+            source = new Bitmap(str);
+        }
 
         public Bitmap getClipAtFrame(int frame, int width, int height)
         {

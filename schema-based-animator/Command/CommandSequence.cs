@@ -4,7 +4,7 @@ using System.Text;
 
 namespace schema_based_animator
 {
-    class CommandSequence<T> where T : ITransform
+    public class CommandSequence<T> where T : ITransform
     {
         List<Command<T>> commands = new List<Command<T>>();
         public T getTransformAtFrame(int frame)

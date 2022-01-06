@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace schema_based_animator
 {
-    public  class Clip
+    /*public  class Clip
     {
         public Bitmap source;
 
@@ -20,5 +20,5 @@ namespace schema_based_animator
         {
             return new Bitmap(Image.FromFile("1.png"));
         }
-    }
+    }**/
 }
