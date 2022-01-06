@@ -11,18 +11,25 @@ namespace schema_based_animator
 {
     public class Canvas
     {
-        List<Clip> clips;
-        int width ;
-        int heiht;
-        int frames;
-        int FramesPreSecond = 30;
+        public List<Clip> clips = new List<Clip>();
+        public int width = 500;
+        public int heiht = 500;
+        public int frames = 30;
+        public int FramesPreSecond = 30;
 
         public const string ProcessingTempFolder = "Tmp";
 
-        Image getCanvasAt(int x)
+        Image getCanvasAt(int frames)
         {
-
-            return Image.FromFile("1.png");
+            Bitmap canvasFrame = new Bitmap(width, heiht);
+            using (Graphics gr = Graphics.FromImage(canvasFrame))
+            {
+                foreach (var item in clips)
+                {
+                    gr.DrawImage(item.getClipAtFrame(frames, width, heiht), Point.Empty);
+                }
+            }    
+            return canvasFrame;
         }
         void saveAsVideo(string path)
         {
@@ -40,10 +47,15 @@ namespace schema_based_animator
                 img.Save(tmpImagePath, System.Drawing.Imaging.ImageFormat.Png);
                 imageInfos[i] = ImageInfo.FromPath(tmpImagePath);
             }
-
+            
             FFMpeg.JoinImageSequence(path, frameRate: FramesPreSecond,
                 imageInfos
             );
+            for (int i = 0; i < frames; i++)
+            {
+                string tmpImagePath = $"{ProcessingTempFolder}/frame_{i}.png";
+                File.Delete(tmpImagePath);
+            }
         }
     }
 }
