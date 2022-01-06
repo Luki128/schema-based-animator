@@ -14,6 +14,7 @@ namespace schema_based_animator
             if (commands.Count == 1) return commands.FirstOrDefault().value;
             int i = 0;
             for (; i < commands.Count && commands[i].frame < frame; i++) ;
+            if (i >= commands.Count()) return commands.LastOrDefault().value;
             return (T)commands[i - 1].value.interpolate((float)(frame-commands[i - 1].frame)/(commands[i].frame-commands[i - 1].frame), commands[i].value);
         }
 
