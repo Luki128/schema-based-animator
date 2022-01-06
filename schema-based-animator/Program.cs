@@ -6,12 +6,7 @@ using System.Collections.Generic;
 namespace schema_based_animator
 {
     class Program
-    {
-
-
-
-
-        
+    {     
 
         static void Main(string[] args)
         {

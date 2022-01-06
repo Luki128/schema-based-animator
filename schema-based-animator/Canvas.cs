@@ -31,7 +31,7 @@ namespace schema_based_animator
             }    
             return canvasFrame;
         }
-        void saveAsVideo(string path)
+       public void saveAsVideo(string path)
         {
             if (!Directory.Exists(ProcessingTempFolder))
             {

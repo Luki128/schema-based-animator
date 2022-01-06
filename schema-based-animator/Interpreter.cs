@@ -26,7 +26,7 @@ namespace schema_based_animator
             var p = f.GetParameters();
             if (p.Length != (args.Length - 1))
             {
-                dbg.Error($"Incorrect number of agruments for {f.Name} expected {p.Length} recived {args.Length - 1}");
+                dbg.Error($"[Line {line}]Incorrect number of agruments for {f.Name} expected {p.Length} recived {args.Length - 1}");
                 return;
             }
             object[] Pasarg = new object[p.Length];
@@ -54,7 +54,7 @@ namespace schema_based_animator
                 }
                 if (!sucess)
                 {
-                    dbg.Error($"Incorrect type of agrument nr:{i + 1} for {f.Name} expected argument type: {p[i].ParameterType.Name} ");
+                    dbg.Error($"[Line {line}] Incorrect type of agrument nr:{i + 1} for {f.Name} expected argument type: {p[i].ParameterType.Name} ");
                     return;
                 }
             }
@@ -63,6 +63,7 @@ namespace schema_based_animator
 
         void addCommand(string name)
         {
+            if (commandBase.ContainsKey(name)) return;
             MethodBase Mymethodbase = this.GetType().GetMethod(name);
             commandBase.Add(name, Mymethodbase);
         }
@@ -90,10 +91,11 @@ namespace schema_based_animator
                 }
                 else
                 {
-                    dbg.Error($"unknown or inaccessible command {arg[0]}");
+                    dbg.Error($"[Line {line}]unknown or inaccessible command {arg[0]}");
                 }
                 line++;
             }
+            dbg.Raport();
         }
         void InitStage2()
         {
@@ -109,6 +111,7 @@ namespace schema_based_animator
             addCommand("rotate");
             addCommand("scale");
             addCommand("rescale");
+            addCommand("video");
         }
 
         public void canvas(int width, int height, int frames)
@@ -131,7 +134,7 @@ namespace schema_based_animator
             };
             currentClip.LoadImage(path);
             currentCanvas.clips.Add(currentClip);
-            InitStage2();
+            InitStage3();
         }
 
         public void position(int frame, int x, int y)
@@ -272,6 +275,11 @@ namespace schema_based_animator
             };
 
             currentClip.scale.addCommand(com);
+        }
+    
+        public void video(string name)
+        {
+            currentCanvas.saveAsVideo(name);
         }
     }
 }
