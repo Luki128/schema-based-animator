@@ -4,7 +4,7 @@ using System.Text;
 
 namespace schema_based_animator
 {
-    class Command<T> : IComparable where T : ITransform
+   public class Command<T> : IComparable where T : ITransform
     {
         public int frame;
         public T value;

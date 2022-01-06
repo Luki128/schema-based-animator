@@ -4,7 +4,7 @@ using System.Text;
 
 namespace schema_based_animator
 {
-    class Position : ITransform
+   public class Position : ITransform
     {
         public float x;
         public float y;

@@ -13,7 +13,7 @@ namespace schema_based_animator
     {
         public List<Clip> clips = new List<Clip>();
         public int width = 500;
-        public int heiht = 500;
+        public int height = 500;
         public int frames = 30;
         public int FramesPreSecond = 30;
 
@@ -21,12 +21,12 @@ namespace schema_based_animator
 
         Image getCanvasAt(int frames)
         {
-            Bitmap canvasFrame = new Bitmap(width, heiht);
+            Bitmap canvasFrame = new Bitmap(width, height);
             using (Graphics gr = Graphics.FromImage(canvasFrame))
             {
                 foreach (var item in clips)
                 {
-                    gr.DrawImage(item.getClipAtFrame(frames, width, heiht), Point.Empty);
+                    gr.DrawImage(item.getClipAtFrame(frames, width, height), Point.Empty);
                 }
             }    
             return canvasFrame;
