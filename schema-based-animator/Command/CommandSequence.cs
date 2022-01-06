@@ -6,7 +6,7 @@ namespace schema_based_animator
 {
     public class CommandSequence<T> where T : ITransform
     {
-        List<Command<T>> commands = new List<Command<T>>();
+        public List<Command<T>> commands = new List<Command<T>>();
         public T getTransformAtFrame(int frame)
         {
             int i = 0;
