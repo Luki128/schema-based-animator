@@ -6,4 +6,8 @@
     <RootNamespace>schema_based_animator</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FFMpegCore" Version="4.6.0" />
+  </ItemGroup>
+
 </Project>
