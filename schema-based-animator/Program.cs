@@ -2,16 +2,19 @@
 using System.Linq;
 using FFMpegCore;
 using LewyDiagnostic;
+using System.Drawing;
 
 
 namespace schema_based_animator
 {
     class Program
     {
-
+        
 
         static void Main(string[] args)
         {
+            
+
             dbg.Title("test", 60,'-', ConsoleColor.Blue);
 
             //   var t = FFmpeg.Conversions.New();
