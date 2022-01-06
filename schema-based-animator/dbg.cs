@@ -153,11 +153,11 @@ namespace LewyDiagnostic
             }
             return failed;
         }
-        public static void CRT_STOP()
+        public static void CRT_STOP(int exitCode = -20)
         {
             Wraning("Appliaction has been halted press any key to end apllication...");
             Console.Read();
-            Environment.Exit(-20);
+            Environment.Exit(exitCode);
         }
     }
 }
