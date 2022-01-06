@@ -5,7 +5,7 @@ using FFMpegCore;
 using LewyDiagnostic;
 using System.Drawing;
 using System.IO;
-
+using System.Threading.Tasks;
 
 namespace schema_based_animator
 {
@@ -40,14 +40,24 @@ namespace schema_based_animator
             }
             ImageInfo[] imageInfos = new ImageInfo[frames];
 
-            for (int i = 0; i < frames; i++)
+          
+            Parallel.For(0, frames, i =>
             {
                 Image img = getCanvasAt(i);
                 string tmpImagePath = $"{ProcessingTempFolder}/frame_{i}.png";
                 img.Save(tmpImagePath, System.Drawing.Imaging.ImageFormat.Png);
                 imageInfos[i] = ImageInfo.FromPath(tmpImagePath);
-            }
-            
+            });
+        
+         /*    for (int i = 0; i < frames; i++)
+             {
+                Image img = getCanvasAt(i);
+                string tmpImagePath = $"{ProcessingTempFolder}/frame_{i}.png";
+                img.Save(tmpImagePath, System.Drawing.Imaging.ImageFormat.Png);
+                imageInfos[i] = ImageInfo.FromPath(tmpImagePath);
+             }*/
+          
+
             FFMpeg.JoinImageSequence(path, frameRate: FramesPreSecond,
                 imageInfos
             );
