@@ -6,7 +6,7 @@ namespace schema_based_animator
 {
    public class Rotation : ITransform
     {
-        public float angle;
+        public float angle = 0.0f;
         public ITransform interpolate(float stage, ITransform target)
         {
             Rotation t = target as Rotation;
