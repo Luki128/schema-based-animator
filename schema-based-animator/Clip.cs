@@ -53,8 +53,11 @@ namespace schema_based_animator
                         x1 -= pos.x;
                         y1 -= pos.y;
 
-                        float x2 = (x1 * cos - y1 * sin) / scal.scale;
-                        float y2 = (x1 * sin + y1 * cos) / scal.scale;
+                        x1 /= scal.global_x;
+                        y1 /= scal.global_y;
+
+                        float x2 = (x1 * cos - y1 * sin) / scal.local_x;
+                        float y2 = (x1 * sin + y1 * cos) / scal.local_y;
 
                         x2 += origin_x;
                         y2 += origin_y;

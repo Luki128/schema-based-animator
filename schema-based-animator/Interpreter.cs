@@ -243,11 +243,14 @@ namespace schema_based_animator
             currentClip.rotation.addCommand(com);
         }
 
-        public void scale(int frame, float scale)
+        public void scale(int frame, float local_x, float local_y, float global_x, float global_y)
         {
             Scale scal = new Scale()
             {
-                scale = scale
+                local_x = local_x,
+                local_y = local_y,
+                global_x = global_x,
+                global_y = global_y,
             };
 
             Command<Scale> com = new Command<Scale>()
@@ -259,13 +262,16 @@ namespace schema_based_animator
             currentClip.scale.addCommand(com);
         }
 
-        public void rescale(int frame, float scale)
+        public void rescale(int frame, float local_x, float local_y, float global_x, float global_y)
         {
             Command<Scale> last = currentClip.scale.commands.LastOrDefault();
             if (last is null) return;
             Scale scal = new Scale()
             {
-                scale = scale * last.value.scale
+                local_x = local_x* last.value.local_x,
+                local_y = local_y * last.value.local_y,
+                global_x = global_x * last.value.global_x,
+                global_y = global_y * last.value.global_y,
             };
 
             Command<Scale> com = new Command<Scale>()
