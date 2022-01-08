@@ -7,70 +7,207 @@ using System.Reflection;
 
 namespace schema_based_animator
 {
+    public class AbstractInterpereter
+    {
+        struct loopInfo
+        {
+            public int startLine;
+            public int times;
+            public loopInfo(int line,int t)
+            {
+                startLine = line;
+                times = t;
+            }
+        }
+
+        private Dictionary<string, string> variable = new Dictionary<string, string>();
+        private CommandEngine cmd = null;
+        private Stack<loopInfo> reaptStack = new Stack<loopInfo>();
+        private int currentLine = 1;
+
+        public AbstractInterpereter()
+        {
+            cmd = new CommandEngine(this);
+            cmd.addCommand("var");
+            cmd.addCommand("repeat");
+            cmd.addCommand("end");
+            cmd.addCommand("add");
+            cmd.addCommand("sub");
+            cmd.addCommand("mul");
+            cmd.addCommand("div");
+            cmd.addCommand("addf");
+            cmd.addCommand("subf");
+            cmd.addCommand("mulf");
+            cmd.addCommand("divf");
+        }
+
+        private string processClassicCommand(string[] cmd)
+        {
+            string wnk = cmd[0];
+            for (int i = 1; i < cmd.Length; i++)
+            {
+                wnk += " ";
+                if (variable.ContainsKey($"{cmd[i]}")) wnk += variable[$"{cmd[i]}"]; else wnk += cmd[i];
+            }
+          //  dbg.Info(wnk);
+            return wnk;
+        }
+
+        public (string[],int[]) RunAbstractIntrprter(string[] srcipt)
+        {
+            List<string> proccedCode = new List<string>();
+            List<int> linieTrack = new List<int>();
+            while ((currentLine-1) < srcipt.Length)
+            {
+                var args = srcipt[currentLine - 1].Split(' ');
+                if (cmd.ExeSrciptCommand(currentLine, args) == -1)
+                {
+                    proccedCode.Add(processClassicCommand(args));
+                    linieTrack.Add(currentLine);
+                    //add null comand to proper line conut in lover level
+                }
+                currentLine++;
+            }
+            return (proccedCode.ToArray(), linieTrack.ToArray());
+        }
+
+        enum OpTypes
+        {
+            Add = 0,
+            Sub = 1,
+            Mul = 3,
+            Div = 4
+        }
+
+
+        float TakeVarOrConstF(string arg)
+        {
+            if (variable.ContainsKey(arg)) arg = variable[arg];
+            float wnk = 0;
+            if (!float.TryParse(arg, out wnk)) dbg.Wraning($"[Line {currentLine}]Fail to convert to int: {arg}");
+            return wnk;
+        }
+        int TakeVarOrConst(string arg)
+        {
+            if (variable.ContainsKey(arg)) arg = variable[arg];
+            int wnk = 0;
+            if (!int.TryParse(arg, out wnk)) dbg.Wraning($"[Line {currentLine}]Fail to convert to int: {arg}");
+            return wnk;
+        }
+        void IntOp(string aVar, string bVar, OpTypes op)
+        {
+            int a = TakeVarOrConst(aVar), b = TakeVarOrConst(bVar);
+            if (variable.ContainsKey(aVar))
+            {
+                switch (op) {
+                    case OpTypes.Add: variable[aVar] = (a + b).ToString(); break;
+                    case OpTypes.Sub: variable[aVar] = (a - b).ToString(); break;
+                    case OpTypes.Mul: variable[aVar] = (a * b).ToString(); break;
+                    case OpTypes.Div:
+                        if (b != 0)
+                            variable[aVar] = (a / b).ToString();
+                        else dbg.Wraning($"[Line {currentLine}] arg nr 2 is not allowed to be 0");
+                    break;
+                }       
+            }
+            else dbg.Wraning("[Line {currentLine}] arg nr 1 must be variable");
+        }
+        void IntOpF(string aVar, string bVar, OpTypes op)
+        {
+            float a = TakeVarOrConstF(aVar), b = TakeVarOrConstF(bVar);
+            if (variable.ContainsKey(aVar))
+            {
+                switch (op)
+                {
+                    case OpTypes.Add: variable[aVar] = (a + b).ToString(); break;
+                    case OpTypes.Sub: variable[aVar] = (a - b).ToString(); break;
+                    case OpTypes.Mul: variable[aVar] = (a * b).ToString(); break;
+                    case OpTypes.Div:
+                        if (b != 0)
+                            variable[aVar] = (a / b).ToString();
+                        else dbg.Wraning($"[Line {currentLine}] arg nr 2 is not allowed to be 0");
+                        break;
+                }
+            }
+            else dbg.Wraning("[Line {currentLine}] arg nr 1 must be variable");
+        }
+        public void add(string aVar,string bVar)
+        {
+            IntOp(aVar, bVar, OpTypes.Add);
+        }
+        public void sub(string aVar, string bVar)
+        {
+            IntOp(aVar, bVar, OpTypes.Sub);
+        }
+        public void mul(string aVar, string bVar)
+        {
+            IntOp(aVar, bVar, OpTypes.Mul);
+        }
+        public void div(string aVar, string bVar)
+        {
+            IntOp(aVar, bVar, OpTypes.Div);
+        }
+        public void addf(string aVar, string bVar)
+        {
+            IntOpF(aVar, bVar, OpTypes.Add);
+        }
+        public void subf(string aVar, string bVar)
+        {
+            IntOpF(aVar, bVar, OpTypes.Sub);
+        }
+        public void mulf(string aVar, string bVar)
+        {
+            IntOpF(aVar, bVar, OpTypes.Mul);
+        }
+        public void divf(string aVar, string bVar)
+        {
+            IntOpF(aVar, bVar, OpTypes.Div);
+        }
+
+        public void var(string name, string value)
+        {
+           // dbg.Succes($"add var {name}, {value}");
+            variable[$"${name}"] = value;
+        }
+        public void repeat(int times)
+        {
+            reaptStack.Push(new loopInfo(currentLine, times - 1));
+        }
+        public void end()
+        {
+            if(reaptStack.Count > 0)
+            {
+                loopInfo loopInfo = reaptStack.Pop();
+                if(loopInfo.times > 0)
+                {
+                    loopInfo.times--;
+                  //  dbg.Wraning($"{currentLine}->{loopInfo.startLine}");
+                    currentLine = loopInfo.startLine;
+                    reaptStack.Push(loopInfo);
+                }
+            }
+            else
+            {
+                dbg.Error($"[Line {currentLine}] unexptcted end of loop");
+            }
+        }
+    }
+
     public class Interpereter
     {
         Canvas currentCanvas = null;
         Clip currentClip = null;
-
-        public Dictionary<string, MethodBase> commandBase = new Dictionary<string, MethodBase>();
+        CommandEngine cmd = null;
         public Interpereter()
         {
-            addCommand("canvas");
+            cmd = new CommandEngine(this);
+            cmd.addCommand("canvas");
         }
-        void ExeCommand(int line, MethodBase f, params string[] args)// arg 0 skip is name function
-        {
-            float fRef = 0;
-            int iRef = 0;
-            string sRef = "";
-
-            var p = f.GetParameters();
-            if (p.Length != (args.Length - 1))
-            {
-                dbg.Error($"[Line {line}]Incorrect number of agruments for {f.Name} expected {p.Length} recived {args.Length - 1}");
-                return;
-            }
-            object[] Pasarg = new object[p.Length];
-
-            for (int i = 0; i < p.Length; i++)
-            {
-                //Console.WriteLine($"{args[i].GetType()} - {p[i].ParameterType}");
-                var t = p[i].ParameterType;
-
-                bool sucess = false;
-                if (fRef.GetType() == t)
-                {
-                    sucess = float.TryParse(args[i + 1], out fRef);
-                    Pasarg[i] = fRef;
-                }
-                else if (iRef.GetType() == t)
-                {
-                    sucess = int.TryParse(args[i + 1], out iRef);
-                    Pasarg[i] = iRef;
-                }
-                else if (sRef.GetType() == t)
-                {
-                    Pasarg[i] = args[i + 1];
-                    sucess = true;
-                }
-                if (!sucess)
-                {
-                    dbg.Error($"[Line {line}] Incorrect type of agrument nr:{i + 1} for {f.Name} expected argument type: {p[i].ParameterType.Name} ");
-                    return;
-                }
-            }
-            f.Invoke(this, Pasarg);
-        }
-
-        void addCommand(string name)
-        {
-            if (commandBase.ContainsKey(name)) return;
-            MethodBase Mymethodbase = this.GetType().GetMethod(name);
-            commandBase.Add(name, Mymethodbase);
-        }
-
+     
         public void RunScript(string name)
         {
             string[] lines;
+            int[] lineCnt;
             try
             {
                 lines = System.IO.File.ReadAllLines(name);
@@ -81,17 +218,16 @@ namespace schema_based_animator
                 // throw;
                 return;
             }
+            AbstractInterpereter abi = new AbstractInterpereter();
+            (lines, lineCnt) = abi.RunAbstractIntrprter(lines);
+
             int line = 1;
             foreach (var item in lines)
             {
-                string[] arg = item.Split(' ');
-                if (commandBase.ContainsKey(arg[0]))
+                string[] arg = item.Split(' ');//commandBase.ContainsKey(arg[0])
+                if (cmd.ExeSrciptCommand(lineCnt[line - 1], arg) == -1)
                 {
-                    ExeCommand(line, commandBase[arg[0]], arg);
-                }
-                else
-                {
-                    dbg.Error($"[Line {line}]unknown or inaccessible command {arg[0]}");
+                    dbg.Error($"[Line {lineCnt[line - 1]}]unknown or inaccessible command {arg[0]}");
                 }
                 line++;
             }
@@ -99,19 +235,19 @@ namespace schema_based_animator
         }
         void InitStage2()
         {
-            addCommand("clip");
+            cmd.addCommand("clip");
         }
         void InitStage3()
         {
-            addCommand("position");
-            addCommand("place");
-            addCommand("move");
-            addCommand("shift");
-            addCommand("rotation");
-            addCommand("rotate");
-            addCommand("scale");
-            addCommand("rescale");
-            addCommand("video");
+            cmd.addCommand("position");
+            cmd.addCommand("place");
+            cmd.addCommand("move");
+            cmd.addCommand("shift");
+            cmd.addCommand("rotation");
+            cmd.addCommand("rotate");
+            cmd.addCommand("scale");
+            cmd.addCommand("rescale");
+            cmd.addCommand("video");
         }
 
         public void canvas(int width, int height, int frames)
@@ -287,5 +423,6 @@ namespace schema_based_animator
         {
             currentCanvas.saveAsVideo(name);
         }
+        
     }
 }

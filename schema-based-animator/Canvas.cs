@@ -15,7 +15,7 @@ namespace schema_based_animator
         public int width = 500;
         public int height = 500;
         public int frames = 30;
-        public int FramesPreSecond = 30;
+        public int FramesPreSecond = 30;//nedd to be chnaged
 
         public const string ProcessingTempFolder = "Tmp";
 
