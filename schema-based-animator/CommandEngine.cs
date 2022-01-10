@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using LewyDiagnostic;
+using System.Globalization;
 
 namespace schema_based_animator
 {
@@ -40,7 +41,7 @@ namespace schema_based_animator
                 bool sucess = false;
                 if (fRef.GetType() == t)
                 {
-                    sucess = float.TryParse(args[i + 1], out fRef);
+                    sucess = float.TryParse(args[i + 1], NumberStyles.Any, CultureInfo.InvariantCulture, out fRef);
                     Pasarg[i] = fRef;
                 }
                 else if (iRef.GetType() == t)
