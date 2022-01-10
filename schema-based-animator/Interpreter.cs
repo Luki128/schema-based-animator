@@ -49,7 +49,7 @@ namespace schema_based_animator
                 wnk += " ";
                 if (variable.ContainsKey($"{cmd[i]}")) wnk += variable[$"{cmd[i]}"]; else wnk += cmd[i];
             }
-          //  dbg.Info(wnk);
+           // dbg.Info(wnk);
             return wnk;
         }
 
@@ -110,7 +110,7 @@ namespace schema_based_animator
                     break;
                 }       
             }
-            else dbg.Wraning("[Line {currentLine}] arg nr 1 must be variable");
+            else dbg.Wraning($"[Line {currentLine}] arg nr 1 must be variable");
         }
         void IntOpF(string aVar, string bVar, OpTypes op)
         {
@@ -166,7 +166,8 @@ namespace schema_based_animator
 
         public void var(string name, string value)
         {
-           // dbg.Succes($"add var {name}, {value}");
+            // dbg.Succes($"add var {name}, {value}");
+            if (variable.ContainsKey(value)) value = variable[value];
             variable[$"${name}"] = value;
         }
         public void repeat(int times)
@@ -203,7 +204,7 @@ namespace schema_based_animator
             cmd = new CommandEngine(this);
             cmd.addCommand("canvas");
         }
-     
+
         public void RunScript(string name)
         {
             string[] lines;
@@ -248,6 +249,7 @@ namespace schema_based_animator
             cmd.addCommand("scale");
             cmd.addCommand("rescale");
             cmd.addCommand("video");
+            cmd.addCommand("open");
         }
 
         public void canvas(int width, int height, int frames)
@@ -404,7 +406,7 @@ namespace schema_based_animator
             if (last is null) return;
             Scale scal = new Scale()
             {
-                local_x = local_x* last.value.local_x,
+                local_x = local_x * last.value.local_x,
                 local_y = local_y * last.value.local_y,
                 global_x = global_x * last.value.global_x,
                 global_y = global_y * last.value.global_y,
@@ -418,11 +420,16 @@ namespace schema_based_animator
 
             currentClip.scale.addCommand(com);
         }
-    
+
         public void video(string name)
         {
             currentCanvas.saveAsVideo(name);
         }
-        
+        public void open(string name)
+        {
+            dbg.Info(AppDomain.CurrentDomain.BaseDirectory + "\\" + name);
+
+            System.Diagnostics.Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", "\""+AppDomain.CurrentDomain.BaseDirectory + name+"\"");
+        }
     }
 }
