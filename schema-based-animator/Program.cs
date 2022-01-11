@@ -12,7 +12,7 @@ namespace schema_based_animator
         static void Main(string[] args)
         {
             string scName = "test.txt";
-            if(args.length > 0)scName = args[0];
+            if(args.Length > 0)scName = args[0];
             while (true)
             {
                 dbg.Info("Rendering...");
