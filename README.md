@@ -1,5 +1,5 @@
 # schema-based-animator
-Scritable engine to generate animations writen in c# 
+Scritable engine to generate animations writen in c# netcore
 To generate out source like mp4 or gif engie use FFmpeg binaries that you can find here:
 https://github.com/BtbN/FFmpeg-Builds/releases
 
@@ -55,7 +55,7 @@ These commands, has argument frame which mean frame number when the transformati
 
 # Examples
 ## Demo 1
- * Script
+### Script
 ```
 var frames 40
 var W 600
@@ -83,3 +83,9 @@ mul $boxMaxH -1
 move 40 0 $boxMaxH
 video demo1.gif
 ```
+### Launch command
+ ```
+ schema-based-animator.exe demo1.txt
+ ```
+### Result
+ ![](https://github.com/Luki128/schema-based-animator/blob/master/demos/demo1.gif)
