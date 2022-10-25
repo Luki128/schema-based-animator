@@ -1,0 +1,25 @@
+var frames 40
+var W 600
+var H 450
+var border 10
+var boxSize 128
+var boxMaxW $W
+sub $boxMaxW $boxSize
+sub $boxMaxW $border
+sub $boxMaxW $border
+var boxMaxH $H
+sub $boxMaxH $boxSize
+sub $boxMaxH $border
+sub $boxMaxH $border
+canvas $W $H $frames
+clip sources\bg.png 0 0
+scale 0 1 1 3 3
+clip sources\box.png 0 0
+position 0 $border $border
+move 10 $boxMaxW 0
+move 20 0 $boxMaxH
+mul $boxMaxW -1
+move 30 $boxMaxW 0
+mul $boxMaxH -1
+move 40 0 $boxMaxH
+video demo1.gif
