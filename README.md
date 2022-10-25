@@ -1,6 +1,6 @@
 # schema-based-animator
 Scritable engine to generate animations writen in c# netcore
-To generate out source like mp4 or gif engie use FFmpeg binaries that you can find here:
+To generate out source like mp4 or gif engine use FFmpeg binaries that you can find here:
 https://github.com/BtbN/FFmpeg-Builds/releases
 
 ## Abstract script commands:
