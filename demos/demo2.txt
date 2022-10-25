@@ -1,0 +1,34 @@
+var frames 80
+var W 600
+var H 450
+var border 10
+var boxSize 128
+var boxMaxW $W
+sub $boxMaxW $boxSize
+sub $boxMaxW $border
+sub $boxMaxW $border
+var boxMaxH $H
+sub $boxMaxH $boxSize
+sub $boxMaxH $border
+sub $boxMaxH $border
+var boxMaxHN $boxMaxH
+mul $boxMaxHN -1
+var boxMaxWN $boxMaxW
+mul $boxMaxWN -1
+canvas $W $H $frames
+clip sources\bg.png 0 0
+scale 0 1 1 3 3
+var f 5
+repeat 4
+clip sources\box.png 0 0
+position 0 $border $border
+move $f $boxMaxW 0
+add $f 5
+move $f 0 $boxMaxH
+add $f 5
+move $f $boxMaxWN 0
+add $f 5
+move $f 0 $boxMaxHN
+add $f 5
+end
+video demo2.gif
