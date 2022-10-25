@@ -249,7 +249,6 @@ namespace schema_based_animator
             cmd.addCommand("scale");
             cmd.addCommand("rescale");
             cmd.addCommand("video");
-            cmd.addCommand("open");
         }
 
         public void canvas(int width, int height, int frames)
@@ -424,12 +423,6 @@ namespace schema_based_animator
         public void video(string name)
         {
             currentCanvas.saveAsVideo(name);
-        }
-        public void open(string name)
-        {
-            dbg.Info(AppDomain.CurrentDomain.BaseDirectory + "\\" + name);
-
-            System.Diagnostics.Process.Start(@"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", "\""+AppDomain.CurrentDomain.BaseDirectory + name+"\"");
         }
     }
 }
